@@ -1,8 +1,14 @@
 package ar.edu.ungs.billetera;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class Billetera implements IBilletera {
+	
+	private HashMap<Integer, Usuario> usuarios;
+	private HashMap<String, Cuenta> cuentas;
+	private ArrayList<Actividad> actividades;
 
 	@Override
 	public void registrarEmpresa(String cuit, String nombreFantasia, String telefono, String email,
