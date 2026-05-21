@@ -24,20 +24,52 @@ public abstract class Cuenta {
 	protected abstract void validarOperacion(double monto); // así hay override en subclases
 
 	public void transferir(Cuenta destino, double monto) {
-		
+		Transferencia transf = new Transferencia(monto, this, destino);
+		try {
+	        validarOperacion(monto);
+
+	        saldo -= monto;	//quedaría mejor si se hiciera un nuevo método acreditar
+	        destino.saldo += monto;
+	        transf.setAprobada(true);
+	    }
+		catch (RuntimeException e) {
+	        transf.setAprobada(false); //ya era false por defecto al crear Transferencia
+	        //deberíamos relanzar la excepcion en terminal?
+	    }
+		finally {
+			if(transf != null) {
+				registrarActividad(transf);
+				if(transf.getAprobada()) {
+					destino.registrarActividad(transf);
+				}
+			}
+	    }
 	}
 
 	public void invertir(Inversion inv) {
-		validarOperacion(inv.getMonto());
-		saldo -= inv.getMonto();
-		montoInvertido += inv.getMonto();
-		registrarActividad(inv);
+	    try {
+	        validarOperacion(inv.getMonto());
+
+	        saldo -= inv.getMonto();
+	        montoInvertido += inv.getMonto();
+	        inv.setAprobada(true);
+	        
+	    } catch (RuntimeException e) { 
+	    	inv.setAprobada(false); //ya era false por defecto al crear Inversion
+	        //deberíamos relanzar la excepcion en terminal?
+	    } finally {
+	    	if(inv != null) {
+				registrarActividad(inv);
+			}
+	    }
 	}
 
 	public void registrarActividad(Actividad act) {
-		if (act != null && act.getAprobada()) {
+		if (act != null) {
 			actividades.add(act);
-			cantidadOperaciones++;
+			if(act.getAprobada()) {
+				cantidadOperaciones++;
+			}
 		}
 	}
 
