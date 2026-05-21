@@ -8,7 +8,7 @@ import java.util.Map;
 public class Billetera implements IBilletera {
 	
 	private Map<String, Usuario> usuarios; //dni : String
-	private Map<String, Cuenta> cuentas; //cvu : String
+	private Map<String, Cuenta> cuentas; //alias : String
 	private Map<String, Empresa> empresas; //cuit : String
 	private List<Actividad> actividades;
 

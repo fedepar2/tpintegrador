@@ -58,12 +58,13 @@ public abstract class Cuenta {
 			saldo -= inv.getMonto();
 			montoInvertido += inv.getMonto();
 			inv.setAprobada(true);
+			titular.actualizarTotalInvertido(inv.getMonto());
 
 		} catch (RuntimeException e) {
 			inv.setAprobada(false); // ya era false por defecto al crear Inversion
 			// deberíamos relanzar la excepcion en terminal?
 		} finally {
-			if (inv != null) {
+			if (inv != null) { //no sé si es necesario
 				registrarActividad(inv);
 			}
 		}
@@ -76,6 +77,7 @@ public abstract class Cuenta {
 				cantidadOperaciones++;
 			}
 		}
+		//añadir excepción?
 	}
 
 	public double saldoTotal() { // deposito más el invertido
@@ -86,7 +88,7 @@ public abstract class Cuenta {
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 
-		sb.append(getClass().getSimpleName().replace("Cuenta", "")); // tipo
+		sb.append(getClass().getSimpleName().replace("Cuenta", "")); // tipo de cuenta
 		sb.append(": ");
 		sb.append(getAlias());
 		sb.append(" (");
