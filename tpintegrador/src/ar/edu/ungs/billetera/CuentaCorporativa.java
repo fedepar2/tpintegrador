@@ -14,7 +14,6 @@ public class CuentaCorporativa extends Cuenta {
 	@Override
 	protected void validarOperacion(double monto) {
 		// TODO Auto-generated method stub
-
 	}
 
 }
