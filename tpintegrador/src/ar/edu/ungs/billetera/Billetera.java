@@ -3,13 +3,14 @@ package ar.edu.ungs.billetera;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Billetera implements IBilletera {
 	
-	private HashMap<String, Usuario> usuarios; //dni : String
-	private HashMap<String, Cuenta> cuentas; //cvu : String
-	private HashMap<String, Empresa> empresas; //cuit : String
-	private ArrayList<Actividad> actividades;
+	private Map<String, Usuario> usuarios; //dni : String
+	private Map<String, Cuenta> cuentas; //cvu : String
+	private Map<String, Empresa> empresas; //cuit : String
+	private List<Actividad> actividades;
 
 	public Billetera() {
 		this.usuarios = new HashMap<>();

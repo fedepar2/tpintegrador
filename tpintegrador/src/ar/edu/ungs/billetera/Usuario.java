@@ -1,6 +1,7 @@
 package ar.edu.ungs.billetera;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class Usuario {
 
@@ -8,7 +9,7 @@ public class Usuario {
 	private String nombre;
 	private String telefono;
 	private String email;
-	private HashMap<String, Cuenta> cuentas; //cvu : String
+	private Map<String, Cuenta> cuentas; //cvu : String
 	private double totalInvertido;
 	
 	public Usuario(String dni, String nombre, String telefono, String email) {
@@ -19,4 +20,8 @@ public class Usuario {
         this.totalInvertido = 0;
         this.cuentas = new HashMap<>();
     }
+	
+	public String getDni() {
+		return dni;
+	}
 }

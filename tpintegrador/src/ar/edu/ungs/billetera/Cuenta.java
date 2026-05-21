@@ -1,6 +1,7 @@
 package ar.edu.ungs.billetera;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public abstract class Cuenta {
 
@@ -8,11 +9,17 @@ public abstract class Cuenta {
 	private String alias;
 	private Usuario titular; // para el toString()
 	private double saldo;
-	private ArrayList<Actividad> actividades;
+	private List<Actividad> actividades;
 	private int cantidadOperaciones;
 	private double montoInvertido; // para que punto 9 sea O(1)
 
 	public Cuenta(String cvu, String alias, double depositoInicial, Usuario titular) {
+		if (cvu == null || alias == null || titular == null) { //habría que también validar si tienen el formato correcto?
+			throw new RuntimeException("CVU, Alias y Titular deben tener un valor.");
+		}
+		if (depositoInicial < 0) {
+			throw new RuntimeException("El depósito inicial no puede ser negativo.");
+		}
 		this.cvu = cvu;
 		this.alias = alias;
 		this.saldo = depositoInicial;
@@ -101,7 +108,7 @@ public abstract class Cuenta {
 	public Usuario getTitular() {
 		return titular;
 	}
-	public ArrayList<Actividad> getActividades() {
+	public List<Actividad> getActividades() {
 		return actividades;
 	}
 	public int getCantOperaciones() {
