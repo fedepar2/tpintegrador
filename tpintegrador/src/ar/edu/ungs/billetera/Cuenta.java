@@ -65,7 +65,7 @@ public abstract class Cuenta {
 	}
 
 	public void registrarActividad(Actividad act) {
-		if (act != null) {
+		if(act != null) {
 			actividades.add(act);
 			if(act.getAprobada()) {
 				cantidadOperaciones++;
@@ -75,6 +75,22 @@ public abstract class Cuenta {
 
 	public double saldoTotal() { //deposito más el invertido 
 		return getSaldo() + getMontoInvertido();
+	}
+	
+	@Override
+	public String toString() {
+	    StringBuilder sb = new StringBuilder();
+	    
+	    sb.append(getClass().getSimpleName().replace("Cuenta", "")); //tipo
+	    sb.append(": ");
+	    sb.append(getAlias());
+	    sb.append(" (");
+	    sb.append(getCvu());
+	    sb.append(")");
+	    
+	    return sb.toString();
+	}
+	
 	}
 	
 	public String getCvu() {
