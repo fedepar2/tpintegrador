@@ -20,4 +20,15 @@ public abstract class Actividad {
 	
 	public abstract String toString();
 
+	public boolean getAprobada() {
+		return aprobada;
+	}
+	public void setAprobada(boolean aprob) {
+		aprobada = aprob;
+	}
+
+	public double getMonto() {
+		return monto;
+	}
+	
 }
