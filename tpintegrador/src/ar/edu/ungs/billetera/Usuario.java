@@ -54,18 +54,26 @@ public class Usuario {
 	public String toString() {
 	    StringBuilder sb = new StringBuilder();
 	    
-	    sb.append("Usuario [DNI: ").append(getDni())
-	      .append(", Nombre: ").append(getNombre()).append("]\n");
+	    sb.append("Usuario [DNI: ");
+	    sb.append(getDni());
+	    sb.append(", Nombre: ");
+	    sb.append(getNombre()).append("]\n");
 	    
 
-	    sb.append("  - Contacto: ").append(getTelefono())
-	      .append(" / ").append(getEmail()).append("\n");
+	    sb.append("  - Contacto: ");
+	    sb.append(getTelefono());
+	    sb.append(" / ");
+	    sb.append(getEmail());
+	    sb.append("\n");
 	    
 
-	    sb.append("  - Total Invertido: $").append(getTotalInvertido()).append("\n");
+	    sb.append("  - Total Invertido: $");
+	    sb.append(getTotalInvertido());
+	    sb.append("\n");
 	    
 
-	    sb.append("  - Cuentas vinculadas: ").append(cuentas.values().toString());
+	    sb.append("  - Cuentas vinculadas: ");
+	    sb.append(cuentas.values().toString());
 	    
 	    return sb.toString();
 	}
