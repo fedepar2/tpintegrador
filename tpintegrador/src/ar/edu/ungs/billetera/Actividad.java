@@ -10,6 +10,9 @@ public abstract class Actividad {
 	private boolean aprobada; //por el toString(); necesario para transferenca
 	
 	public Actividad(double monto, Cuenta origen) {
+		if(monto <= 0 || origen == null) {
+			throw new RuntimeException("Un monto y una cuenta origen son obligatorios.");
+        }
         this.fecha = Utilitarios.hoy(); // uso de la clase Utilitarios
         this.monto = monto;
         this.origen = origen;

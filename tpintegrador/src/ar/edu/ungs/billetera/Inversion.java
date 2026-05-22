@@ -8,34 +8,47 @@ public abstract class Inversion extends Actividad {
 	private double tasa; //FL ahora tiene tasa
 	private boolean precancelada; //estado
 	private boolean precancelable; //regla de negocio
-	private String tipoInversion; //para toString()...
 	
-	public Inversion(double monto, Cuenta origen, int id, int plazo, String activo, double tasa, boolean precancelable, String tipo) {
+	public Inversion(double monto, Cuenta origen, int id, int plazo, String activo,
+			         double tasa, boolean precancelable) {
         super(monto, origen);
+        if(id <= 0 || plazo <= 0 || tasa < 0) {
+        	throw new RuntimeException("ID, plazo y tasa son obligatorios.");
+        }
+        if(activo == null) {
+        	throw new RuntimeException("Un activo y tipo de inversión son obligatorios.");
+        }
         this.idInversion = id;
         this.plazo = plazo;
         this.activo = activo;
         this.tasa = tasa;
         this.precancelada = false;
         this.precancelable = precancelable;
-        this.tipoInversion = tipo;
     }
 
 	
 	@Override
 	public void ejecutar() {
-		// TODO Auto-generated method stub
+	    try {
+	    	//validarInversion();
+	    	getOrigen().invertir(this); 
 
+	    	getOrigen().getTitular().actualizarTotalInvertido(this.getMonto());
+	    	this.setAprobada(true);
+	    }
+	    catch (RuntimeException e) {
+	    	this.setAprobada(false);
+	    	throw e;
+	    }
+	    finally {
+	        this.getOrigen().registrarActividad(this);
+	    }
 	}
 
-	@Override
-	public String toString() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	public abstract String toString();
 	
 	public abstract double calcularRendimiento();
 	
-	public abstract void validarInversion();
+	//public abstract void validarInversion(); es necesario o debería ser abstracto de Actividad?
 
 }

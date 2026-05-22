@@ -5,7 +5,7 @@ import java.util.List;
 
 public abstract class Cuenta {
 
-	private String cvu;
+	private String cvu; //cvu de 22 digitos...
 	private String alias;
 	private Usuario titular; // para el toString()
 	private double saldo;
@@ -37,23 +37,12 @@ public abstract class Cuenta {
 	    destino.saldo += monto;
 	}
 
-	public void invertir(Inversion inv) { //quizás el método cambie debido a ejecutar()
-		try {
-			validarOperacion(inv.getMonto());
-
-			saldo -= inv.getMonto();
-			montoInvertido += inv.getMonto();
-			inv.setAprobada(true);
-			titular.actualizarTotalInvertido(inv.getMonto());
-
-		} catch (RuntimeException e) {
-			inv.setAprobada(false); // ya era false por defecto al crear Inversion
-			// deberíamos relanzar la excepcion en terminal?
-		} finally {
-			if (inv != null) { //no sé si es necesario
-				registrarActividad(inv);
-			}
-		}
+	public void invertir(Inversion inv) {
+		validarOperacion(inv.getMonto());
+		
+		saldo -= inv.getMonto();
+		montoInvertido += inv.getMonto();
+		getTitular().actualizarTotalInvertido(inv.getMonto());
 	}
 
 	public void registrarActividad(Actividad act) {
@@ -71,7 +60,7 @@ public abstract class Cuenta {
 	}
 
 	@Override
-	public String toString() {
+	public String toString() { //o debería ser abstracto?
 		StringBuilder sb = new StringBuilder();
 
 		sb.append(getClass().getSimpleName().replace("Cuenta", "")); // tipo de cuenta concreta
