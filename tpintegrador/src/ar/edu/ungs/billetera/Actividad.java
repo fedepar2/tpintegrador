@@ -13,12 +13,12 @@ public abstract class Actividad {
         this.fecha = Utilitarios.hoy(); // uso de la clase Utilitarios
         this.monto = monto;
         this.origen = origen;
-        this.aprobada = false; // se marca como aprobada tras la ejecución exitosa
+        this.aprobada = false; //se marca como aprobada tras la ejecución exitosa
     }
 	
 	public abstract void ejecutar();
 	
-	public abstract String toString();
+	public abstract String toString(); //hace falta?
 
 	public boolean getAprobada() {
 		return aprobada;
@@ -26,9 +26,11 @@ public abstract class Actividad {
 	public void setAprobada(boolean aprob) {
 		aprobada = aprob;
 	}
-
 	public double getMonto() {
 		return monto;
+	}
+	public Cuenta getOrigen() {
+		return origen;
 	}
 	
 }
