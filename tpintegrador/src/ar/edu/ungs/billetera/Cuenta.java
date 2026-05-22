@@ -74,7 +74,7 @@ public abstract class Cuenta {
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 
-		sb.append(getClass().getSimpleName().replace("Cuenta", "")); // tipo de cuenta
+		sb.append(getClass().getSimpleName().replace("Cuenta", "")); // tipo de cuenta concreta
 		sb.append(": ");
 		sb.append(getAlias());
 		sb.append(" (");

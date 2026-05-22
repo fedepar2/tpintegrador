@@ -20,6 +20,9 @@ public abstract class Actividad {
 	
 	public abstract String toString(); //hace falta?
 
+	public LocalDate getFecha() {
+		return fecha;
+	}
 	public boolean getAprobada() {
 		return aprobada;
 	}
