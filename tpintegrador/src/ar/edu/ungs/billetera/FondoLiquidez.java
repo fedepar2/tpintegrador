@@ -2,24 +2,70 @@ package ar.edu.ungs.billetera;
 
 public class FondoLiquidez extends Inversion {
 
+	// Monto mínimo requerido para invertir
 	private static final double MINIMO = 20000000;
-	
-	public FondoLiquidez(double monto, Cuenta origen, int id, int plazo, String activo, //activo y tipo siempre los mismos
-			String tipo) {
-		super(monto, origen, id, plazo, activo, 0.08, false, tipo);
-		// TODO Auto-generated constructor stub
-	}
 
-	@Override
-	public double calcularRendimiento() {
-		// TODO Auto-generated method stub
-		return 0;
+	// Constantes propias del tipo de inversión
+	private static final String ACTIVO = "FCI";
+	private static final double TASA = 0.08;
+
+	public FondoLiquidez(double monto, Cuenta origen, int id, int plazo) {
+
+		// Los fondos de liquidez NO son precancelables
+		super(monto, origen, id, plazo, ACTIVO, TASA, false);
 	}
 
 	@Override
 	public void validarInversion() {
-		// TODO Auto-generated method stub
 
+		// El monto debe ser positivo
+		if (getMonto() <= 0) {
+			throw new RuntimeException("Monto invalido.");
+		}
+
+		// Verifica saldo suficiente
+		if (getMonto() > getOrigen().getSaldo()) {
+			throw new RuntimeException("Saldo insuficiente.");
+		}
+
+		// Verifica monto mínimo requerido
+		if (getMonto() < MINIMO) {
+			throw new RuntimeException("El monto minimo para Fondo Liquidez es " + MINIMO);
+		}
 	}
 
+	@Override
+	public double calcularRendimiento() {
+
+		// Fondo de liquidez:
+		// rendimiento simple por tasa fija
+
+		return getMonto() * getTasa();
+	}
+
+	@Override
+	public String toString() {
+
+		StringBuilder sb = new StringBuilder();
+
+		sb.append("origen: ");
+		sb.append(getOrigen().getTitular().getDni());
+		sb.append(" (");
+		sb.append(getOrigen().getCvu());
+		sb.append(")\n");
+
+		sb.append("desc: Fondo de Liquidez\n");
+
+		sb.append("monto: ");
+		sb.append(getMonto());
+		sb.append("\n");
+
+		sb.append("plazo: ");
+		sb.append(getPlazo());
+		sb.append("\n");
+
+		sb.append(getAprobada() ? "Aprobado" : "Rechazado");
+
+		return sb.toString();
+	}
 }

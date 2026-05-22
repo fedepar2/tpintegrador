@@ -1,5 +1,7 @@
 package ar.edu.ungs.billetera;
 
+import java.time.LocalDate;
+
 public abstract class Inversion extends Actividad {
 
 	private int idInversion; // para punto 13
@@ -8,6 +10,7 @@ public abstract class Inversion extends Actividad {
 	private double tasa; // FL ahora tiene tasa
 	private boolean precancelada; // estado
 	private boolean precancelable; // regla de negocio
+	private LocalDate fechaVencimiento; // porque las inversiones tienen fecha de vencimiento
 
 	public Inversion(double monto, Cuenta origen, int id, int plazo, String activo, double tasa,
 			boolean precancelable) {
@@ -24,19 +27,18 @@ public abstract class Inversion extends Actividad {
 		this.tasa = tasa;
 		this.precancelada = false;
 		this.precancelable = precancelable;
+		this.fechaVencimiento = getFecha().plusDays(plazo); // se usa para calcular la fecha de vencimiento de la
+															// inversion
 	}
 
 	@Override
-	public void ejecutar() {
+	public void ejecutar() { // no es abstracto popr que sirve para cualquier tipo de inversion
 		try {
-			// validarInversion();
 			getOrigen().invertir(this);
+			aprobar();
 
-			// getOrigen().getTitular().actualizarTotalInvertido(this.getMonto()); (duplica
-			// logica de actualizar total
-			this.setAprobada(true);
 		} catch (RuntimeException e) {
-			this.setAprobada(false);
+			rechazar();
 			throw e;
 		} finally {
 			this.getOrigen().registrarActividad(this);
@@ -47,7 +49,18 @@ public abstract class Inversion extends Actividad {
 
 	public abstract double calcularRendimiento();
 
-	// public abstract void validarInversion(); es necesario o debería ser abstracto
-	// de Actividad?
+	public abstract void validarInversion();
+
+	public int getPlazo() {
+		return plazo;
+	}
+
+	public String getActivo() {
+		return activo;
+	}
+
+	public double getTasa() {
+		return tasa;
+	}
 
 }
