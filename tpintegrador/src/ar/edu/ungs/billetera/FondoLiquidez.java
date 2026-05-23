@@ -12,6 +12,7 @@ public class FondoLiquidez extends Inversion {
 	public FondoLiquidez(double monto, Cuenta origen, int id, int plazo) {
 
 		// Los fondos de liquidez NO son precancelables
+		// HABRÍA QUE VERIFICAR QUE CUENTA ORIGEN SEA SOLO UNA CUENTA CORPORATIVA
 		super(monto, origen, id, plazo, ACTIVO, TASA, false);
 	}
 
@@ -32,6 +33,7 @@ public class FondoLiquidez extends Inversion {
 		if (getMonto() < MINIMO) {
 			throw new RuntimeException("El monto minimo para Fondo Liquidez es " + MINIMO);
 		}
+		//this.getOrigen().validarOperacion(this.getMonto());
 	}
 
 	@Override
@@ -64,7 +66,12 @@ public class FondoLiquidez extends Inversion {
 		sb.append(getPlazo());
 		sb.append("\n");
 
-		sb.append(getAprobada() ? "Aprobado" : "Rechazado");
+		if (getAprobada()) {
+			sb.append("[Aprobado]");
+		}
+		else {
+		    sb.append("[Rechazado]");
+		}
 
 		return sb.toString();
 	}

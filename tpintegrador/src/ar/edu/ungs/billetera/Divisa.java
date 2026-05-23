@@ -8,10 +8,10 @@ public class Divisa extends Inversion {
 	// y calcular la ganancia o pérdida.
 	private double cotizacionInicial;
 
-	public Divisa(double monto, Cuenta origen, int id, int plazo, String activo, double tasa) {
+	public Divisa(double monto, Cuenta origen, int id, int plazo, String activo, double tasa, boolean precancelable) {
 
-		// Las inversiones en divisas son precancelables
-		super(monto, origen, id, plazo, activo, tasa, true);
+		// Las inversiones en divisas pueden ser precancelables o no
+		super(monto, origen, id, plazo, activo, tasa, precancelable);
 
 		// Guarda cotización inicial del activo
 		this.cotizacionInicial = Utilitarios.consultarCotizacion(activo);
@@ -27,7 +27,9 @@ public class Divisa extends Inversion {
 		if (getMonto() > getOrigen().getSaldo()) {
 			throw new RuntimeException("Saldo insuficiente.");
 		}
-
+		
+		//this.getOrigen().validarOperacion(this.getMonto()); NO SÉ SI ES NECESARIO
+		
 		// Verifica que la divisa exista
 		Utilitarios.consultarCotizacion(getActivo());
 	}
@@ -83,7 +85,12 @@ public class Divisa extends Inversion {
 		sb.append(getPlazo());
 		sb.append("\n");
 
-		sb.append(getAprobada() ? "Aprobado" : "Rechazado");
+		if (getAprobada()) {
+			sb.append("[Aprobado]");
+		}
+		else {
+		    sb.append("[Rechazado]");
+		}
 
 		return sb.toString();
 	}

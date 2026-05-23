@@ -19,10 +19,10 @@ public class Transferencia extends Actividad {
 		try {
 			//validarInversion();
 			getOrigen().transferir(getDestino(), getMonto());
-		    setAprobada(true); 
+			aprobar(); 
 		}
 		catch (RuntimeException e) {
-		    setAprobada(false);
+			rechazar();
 		    throw e; 
 		}
 		finally {
@@ -59,7 +59,8 @@ public class Transferencia extends Actividad {
 	    
 	    if (getAprobada()) {
 	        sb.append("[Aprobado]");
-	    } else {
+	    }
+	    else {
 	        sb.append("[Rechazado]");
 	    }
 	    

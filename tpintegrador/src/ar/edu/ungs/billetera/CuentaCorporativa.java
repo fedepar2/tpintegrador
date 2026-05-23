@@ -6,7 +6,7 @@ public class CuentaCorporativa extends Cuenta {
 	private Empresa empresa; //contiene los DNIs autorizados
 	
 	public CuentaCorporativa(String cvu, String alias, double depositoInicial, Usuario titular, String cuit, Empresa empresa) {
-	    super(cvu, alias, depositoInicial, titular);
+	    super(alias, depositoInicial, titular);
 	    if (cuit == null) { //menor a 11...
 	        throw new RuntimeException("El CUIT es obligatorio para cuentas corporativas.");
 	    }
