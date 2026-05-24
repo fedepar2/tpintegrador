@@ -15,7 +15,8 @@ public class Usuario {
 	private double totalInvertido;
 	
 	public Usuario(String dni, String nombre, String telefono, String email) {
-		if(dni == null || nombre == null || telefono == null || email == null) {
+		if(dni == null || dni.isEmpty() || nombre == null || nombre.isEmpty()
+           || telefono == null || telefono.isEmpty() || email == null || email.isEmpty()) {
 			 throw new RuntimeException("DNI, nombre, teléfono y email son obligatorios.");
 		}
         this.dni = dni;

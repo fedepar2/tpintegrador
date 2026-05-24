@@ -4,7 +4,7 @@ public class CuentaRegular extends Cuenta {
 
 	private static final double LIMITE = 5000000; //constante de clase
 	
-	public CuentaRegular(String cvu, String alias, double depositoInicial, Usuario titular) {
+	public CuentaRegular(String alias, double depositoInicial, Usuario titular) {
 		super(alias, depositoInicial, titular);
 	}
 

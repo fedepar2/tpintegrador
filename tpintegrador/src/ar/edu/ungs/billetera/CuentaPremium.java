@@ -4,7 +4,7 @@ public class CuentaPremium extends Cuenta {
 
 	private static final double MINIMO = 500000; //constante de clase
 	
-	public CuentaPremium(String cvu, String alias, double depositoInicial, Usuario titular) {
+	public CuentaPremium(String alias, double depositoInicial, Usuario titular) {
 		super(alias, depositoInicial, titular);		
 	}
 
