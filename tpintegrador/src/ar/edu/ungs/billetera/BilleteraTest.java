@@ -89,6 +89,7 @@ public class BilleteraTest {
 		billetera.realizarInversionRentaFija("11111111", cvuAlice, 500, 30);
 
 		List<String> top = billetera.cuentasConMayorVolumen(2);
+		System.out.println(top);
 		assertTrue(top.get(0).contains(cvuAlice)); // Alice tiene 3 transacciones (2 transf, 1 inv)
 		assertTrue(top.get(1).contains(cvuBob)); // Bob tiene 2 (las transferencias recibidas)
 	}

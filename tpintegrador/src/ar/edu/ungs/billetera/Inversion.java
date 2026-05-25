@@ -63,4 +63,8 @@ public abstract class Inversion extends Actividad {
 		return tasa;
 	}
 
+	public int getIdInversion() {
+		return idInversion;
+	}
+
 }

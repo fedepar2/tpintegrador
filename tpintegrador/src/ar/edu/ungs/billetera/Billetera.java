@@ -187,22 +187,94 @@ public class Billetera implements IBilletera {
 	}
 
 	@Override
-	public int realizarInversionRentaFija(String dni, String cvu, double monto, int plazoDias) { // punto 6
-		// TODO Auto-generated method stub
-		return 0;
+	public int realizarInversionRentaFija(String dniUsuario, String cvuCuenta, double monto, int plazo) {
+
+		if (!usuarios.containsKey(dniUsuario)) {
+			throw new IllegalArgumentException("Usuario inexistente.");
+		}
+
+		Cuenta cuenta = cuentas.get(cvuCuenta);
+
+		if (cuenta == null) {
+			throw new IllegalArgumentException("Cuenta inexistente.");
+		}
+
+		// crear inversión
+		Inversion inversion = new RentaFija(monto, cuenta, actividades.size() + 1, plazo, "ARS", 0.20, true);
+
+		// ejecutar inversión
+		inversion.ejecutar();
+
+		// guardar en historial global
+		actividades.add(inversion);
+
+		return inversion.getIdInversion();
 	}
 
 	@Override
-	public int realizarInversionDivisa(String dni, String cvu, double monto, int plazoDias, String divisa, // punto 6
+	public int realizarInversionDivisa(String dni, String cvu, double monto, int plazoDias, String divisa,
 			double tasa) {
-		// TODO Auto-generated method stub
-		return 0;
+
+		// validar usuario
+		if (!usuarios.containsKey(dni)) {
+			throw new IllegalArgumentException("El usuario no existe.");
+		}
+
+		// buscar cuenta
+		Cuenta cuenta = cuentas.get(cvu);
+
+		if (cuenta == null) {
+			throw new IllegalArgumentException("La cuenta no existe.");
+		}
+
+		// generar ID
+		int id = actividades.size() + 1;
+
+		// crear inversión
+		Inversion inversion = new Divisa(monto, cuenta, id, plazoDias, divisa, tasa, true);
+
+		// ejecutar inversión
+		inversion.ejecutar();
+
+		// registrar en historial global
+		actividades.add(inversion);
+
+		return inversion.getIdInversion();
 	}
 
 	@Override
-	public int realizarInversionLiquidez(String dni, String cvu, double monto, int plazoDias) { // punto 6
-		// TODO Auto-generated method stub
-		return 0;
+	public int realizarInversionLiquidez(String dni, String cvu, double monto, int plazoDias) {
+
+		// validar usuario
+		if (!usuarios.containsKey(dni)) {
+			throw new IllegalArgumentException("El usuario no existe.");
+		}
+
+		// buscar cuenta
+		Cuenta cuenta = cuentas.get(cvu);
+
+		if (cuenta == null) {
+			throw new IllegalArgumentException("La cuenta no existe.");
+		}
+
+		// validar tipo de cuenta
+		if (!(cuenta instanceof CuentaCorporativa)) {
+			throw new IllegalArgumentException("Solo las cuentas corporativas pueden invertir en fondos de liquidez.");
+		}
+
+		// generar ID
+		int id = actividades.size() + 1;
+
+		// crear inversión
+		Inversion inversion = new FondoLiquidez(monto, cuenta, id, plazoDias);
+
+		// ejecutar inversión
+		inversion.ejecutar();
+
+		// registrar en historial global
+		actividades.add(inversion);
+
+		return inversion.getIdInversion();
 	}
 
 	@Override
@@ -270,9 +342,37 @@ public class Billetera implements IBilletera {
 	}
 
 	@Override
-	public List<String> cuentasConMayorVolumen(int cantidadTop) { // punto 10
-		// TODO Auto-generated method stub
-		return null;
+	public List<String> cuentasConMayorVolumen(int cantidadTop) {
+
+		if (cantidadTop <= 0) {
+			throw new IllegalArgumentException("La cantidad debe ser positiva.");
+		}
+
+		// convertir map de cuentas en lista
+		List<Cuenta> listaCuentas = new ArrayList<>(cuentas.values());
+
+		for (Cuenta c : listaCuentas) {
+			System.out.println(c.getCvu() + " -> " + c.getCantOperaciones());
+		}
+
+		// ordenar de mayor a menor cantidad de operaciones
+		listaCuentas.sort((c1, c2) -> Integer.compare(c2.getCantOperaciones(), c1.getCantOperaciones()));
+
+		System.out.println("ORDENADO:");
+
+		for (Cuenta c : listaCuentas) {
+			System.out.println(c.getCvu() + " -> " + c.getCantOperaciones());
+		}
+
+		List<String> resultado = new ArrayList<>();
+
+		// tomar top N
+		for (int i = 0; i < cantidadTop && i < listaCuentas.size(); i++) {
+
+			resultado.add(listaCuentas.get(i).toString());
+		}
+
+		return resultado;
 	}
 
 	// Se debe poder imprimir “Billetera” mostrando sus datos en formato adecuado

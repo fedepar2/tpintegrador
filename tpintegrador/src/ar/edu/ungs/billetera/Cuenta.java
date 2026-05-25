@@ -66,6 +66,17 @@ public abstract class Cuenta {
 		return getSaldo() + getMontoInvertido();
 	}
 
+	public void invertir(Inversion inv) {
+
+		validarOperacion(inv.getMonto());
+
+		saldo -= inv.getMonto();
+
+		montoInvertido += inv.getMonto();
+
+		titular.actualizarTotalInvertido(inv.getMonto());
+	}
+
 	@Override
 	public String toString() { // o debería ser abstracto?
 		StringBuilder sb = new StringBuilder();
