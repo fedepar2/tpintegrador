@@ -183,6 +183,7 @@ public class Billetera implements IBilletera {
 		Transferencia transferencia = new Transferencia(monto, origen, destino);
 
 		transferencia.ejecutar();
+		actividades.add(transferencia);
 	}
 
 	@Override
@@ -221,9 +222,15 @@ public class Billetera implements IBilletera {
 	}
 
 	@Override
-	public List<String> consultarHistorialGlobal() { // punto 7
-		// TODO Auto-generated method stub
-		return null;
+	public List<String> consultarHistorialGlobal() {
+
+		List<String> historial = new ArrayList<>();
+
+		for (Actividad act : actividades) {
+			historial.add(act.toString());
+		}
+
+		return historial;
 	}
 
 	@Override
