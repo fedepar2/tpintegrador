@@ -207,11 +207,8 @@ public class BilleteraTest {
 
 		List<String> historialAlice = billetera.consultarHistorialUsuario("11111111");
 		// Alice hizo 2 transferencias
-		// assertEquals(2, historialAlice.size());
-		System.out.println(historialAlice);
-		System.out.println(historialAlice.size());
-
 		assertEquals(2, historialAlice.size());
+
 	}
 
 }

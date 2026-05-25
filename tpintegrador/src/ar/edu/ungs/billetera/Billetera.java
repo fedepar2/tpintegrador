@@ -180,7 +180,9 @@ public class Billetera implements IBilletera {
 			throw new IllegalArgumentException("Cuenta inexistente.");
 		}
 
-		origen.transferir(destino, monto);
+		Transferencia transferencia = new Transferencia(monto, origen, destino);
+
+		transferencia.ejecutar();
 	}
 
 	@Override
@@ -231,9 +233,27 @@ public class Billetera implements IBilletera {
 	}
 
 	@Override
-	public List<String> consultarHistorialUsuario(String dniUsuario) { // punto 8
-		// TODO Auto-generated method stub
-		return null;
+	public List<String> consultarHistorialUsuario(String dniUsuario) {
+
+		if (!usuarios.containsKey(dniUsuario)) {
+			throw new IllegalArgumentException("El usuario no existe.");
+		}
+
+		Usuario usuario = usuarios.get(dniUsuario);
+
+		List<String> historial = new ArrayList<>();
+
+		// recorrer cuentas del usuario
+		for (Cuenta cuenta : usuario.getCuentas().values()) {
+
+			// recorrer actividades de cada cuenta
+			for (Actividad actividad : cuenta.getActividades()) {
+
+				historial.add(actividad.toString());
+			}
+		}
+
+		return historial;
 	}
 
 	@Override
