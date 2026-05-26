@@ -160,14 +160,34 @@ public class Billetera implements IBilletera {
 
 	@Override
 	public List<String> obtenerCuentas(String dniUsuario) { // punto 3
-		// TODO Auto-generated method stub
-		return null;
+	    if (!usuarios.containsKey(dniUsuario)) {
+	        throw new RuntimeException("El usuario con DNI " + dniUsuario + " no existe."); // [4, 5]
+	    }
+	    
+	    Usuario titular = usuarios.get(dniUsuario);
+	    
+	    List<String> resultado = new ArrayList<>();
+
+	    for (Cuenta cuenta : titular.listarCuentas()) { // for-each
+	        resultado.add(cuenta.toString());
+	    }
+
+	    return resultado;
 	}
 
 	@Override
 	public double obtenerSaldoDisponible(String cvu) { // punto 4
-		// TODO Auto-generated method stub
-		return 0;
+	    if (cvu == null || cvu.trim().isEmpty()) {
+	        throw new RuntimeException("El CVU proporcionado es inválido.");
+	    }
+
+	    if (!cuentas.containsKey(cvu)) {
+	        throw new RuntimeException("La cuenta con CVU " + cvu + " no existe.");
+	    }
+
+	    Cuenta cuenta = cuentas.get(cvu);
+
+	    return cuenta.getSaldo();
 	}
 
 	@Override
@@ -279,8 +299,58 @@ public class Billetera implements IBilletera {
 
 	@Override
 	public void precancelarInversion(String dni, String cvu, int idInversion) { // punto 13
-		// TODO Auto-generated method stub
+	    if (dni == null || cvu == null || dni.isEmpty() || cvu.isEmpty()) {
+	        throw new RuntimeException("Los datos de identificación no pueden ser nulos o vacíos.");
+	    }
 
+	    if (!usuarios.containsKey(dni)) {
+	        throw new RuntimeException("El usuario con DNI " + dni + " no existe.");
+	    }
+
+	    if (!cuentas.containsKey(cvu)) {
+	        throw new RuntimeException("La cuenta con CVU " + cvu + " no existe.");
+	    }
+
+	    Cuenta cuenta = cuentas.get(cvu);
+
+	    List<Actividad> actividades = cuenta.getActividades();
+	    
+	    int i = 0;
+	    boolean encontrada = false;
+	    while (i < actividades.size() && !encontrada) {
+	        Actividad act = actividades.get(i);
+
+	        if (act instanceof Inversion) {
+	            Inversion inv = (Inversion) act;
+
+	            if (inv.getIdInversion() == idInversion) {
+	                encontrada = true;
+	                // verificación de seguridad
+	                if (!inv.getOrigen().getTitular().getDni().equals(dni)) {
+	                    throw new RuntimeException("La inversión no pertenece al usuario indicado.");
+	                }
+
+	                // Lanza error si la inversión no está activa o no es precancelable [4]
+	                if (!inv.estaPrecancelada()) {
+	                    throw new RuntimeException("La inversión con ID " + idInversion + " ya fue precancelada.");
+	                }
+
+	                if (!inv.getPrecancelable()) {
+	                    throw new RuntimeException("Este tipo de inversión no admite precancelación anticipada.");
+	                }
+
+	                inv.precancelar();
+	            }
+	        }
+	        
+	        if (!encontrada) {
+	            i++;
+	        }
+	    }
+
+	    if (!encontrada) {
+	        throw new RuntimeException("No se encontró la inversión con ID " + idInversion + " en la cuenta especificada.");
+	    }
 	}
 
 	@Override

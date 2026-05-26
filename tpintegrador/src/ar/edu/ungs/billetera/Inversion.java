@@ -32,7 +32,7 @@ public abstract class Inversion extends Actividad {
 	}
 
 	@Override
-	public void ejecutar() { // no es abstracto popr que sirve para cualquier tipo de inversion
+	public void ejecutar() { // no es abstracto porque sirve para cualquier tipo de inversion
 		try {
 			getOrigen().invertir(this);
 			aprobar();
@@ -66,5 +66,16 @@ public abstract class Inversion extends Actividad {
 	public int getIdInversion() {
 		return idInversion;
 	}
+	
+	public boolean getPrecancelable() {
+		return precancelable;
+	}
 
+	public boolean estaPrecancelada() {
+		return precancelada;
+	}
+	
+	public void precancelar() {
+		precancelada = true;
+	}
 }
