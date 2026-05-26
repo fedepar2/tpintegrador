@@ -23,16 +23,41 @@ public class Billetera implements IBilletera {
 
 	// no modificar estos métodos
 	@Override
-	public void registrarEmpresa(String cuit, String nombreFantasia, String telefono, String email, // punto 11
+	public void registrarEmpresa(String cuit, String nombreFantasia, String telefono, String email,
 			String nombreContacto) {
-		// TODO Auto-generated method stub
 
+		// validar parámetros
+		if (cuit == null || nombreFantasia == null || telefono == null || email == null || nombreContacto == null) {
+
+			throw new IllegalArgumentException("Todos los datos de la empresa son obligatorios.");
+		}
+
+		// evitar empresas repetidas
+		if (empresas.containsKey(cuit)) {
+			throw new IllegalArgumentException("La empresa con CUIT " + cuit + " ya existe.");
+		}
+
+		// crear empresa
+		Empresa empresa = new Empresa(cuit, nombreFantasia, telefono, email, nombreContacto);
+
+		// guardar empresa
+		empresas.put(cuit, empresa);
 	}
 
 	@Override
-	public void agregarPersonaAutorizada(String cuitEmpresa, String dniAutorizado) { // punto 12
-		// TODO Auto-generated method stub
+	public void agregarPersonaAutorizada(String cuit, String dni) {
 
+		if (!empresas.containsKey(cuit)) {
+			throw new IllegalArgumentException("La empresa no existe.");
+		}
+
+		if (!usuarios.containsKey(dni)) {
+			throw new IllegalArgumentException("El usuario no existe.");
+		}
+
+		Empresa empresa = empresas.get(cuit);
+
+		empresa.agregarPersonaAutorizada(dni);
 	}
 
 	@Override
