@@ -34,7 +34,8 @@ public abstract class Cuenta {
 		this.montoInvertido = 0; // por claridad
 	}
 
-	protected abstract void validarOperacion(double monto); // así hay override en subclases
+	protected abstract void validarInversion(double monto);
+	protected abstract void validarTransferencia(double monto);
 
 	public void transferir(Cuenta destino, double monto) {
 
@@ -46,7 +47,7 @@ public abstract class Cuenta {
 			throw new IllegalStateException("Saldo insuficiente.");
 		}
 
-		destino.validarOperacion(monto);
+		destino.validarTransferencia(monto);
 
 		saldo -= monto;
 		destino.acreditar(monto);
@@ -68,7 +69,7 @@ public abstract class Cuenta {
 
 	public void invertir(Inversion inv) {
 
-		validarOperacion(inv.getMonto());
+		validarInversion(inv.getMonto());
 
 		saldo -= inv.getMonto();
 

@@ -9,16 +9,23 @@ public class CuentaRegular extends Cuenta {
 	}
 
 	@Override
-	protected void validarOperacion(double monto) {
-
+	protected void validarTransferencia(double monto) {
 		if (monto <= 0) {
 			throw new IllegalStateException("Monto invalido.");
 		}
 
 		if (saldoTotal() + monto > LIMITE) {
+			throw new IllegalStateException("Una cuenta regular no puede superar los 5 millones.");
+		}
+	}
+	
+	@Override
+	protected void validarInversion(double monto) {
+		if (monto <= 0) {
+			throw new IllegalStateException("Monto invalido.");
+		}
 
-			System.out.println("LANZO EXCEPCION");
-
+		if (saldoTotal() + monto > LIMITE) {
 			throw new IllegalStateException("Una cuenta regular no puede superar los 5 millones.");
 		}
 	}

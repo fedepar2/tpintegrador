@@ -45,19 +45,14 @@ public class Billetera implements IBilletera {
 	}
 
 	@Override
-	public void agregarPersonaAutorizada(String cuit, String dni) {
+	public void agregarPersonaAutorizada(String cuitEmpresa, String dniAutorizado) {
+	    if (!empresas.containsKey(cuitEmpresa)) {
+	        throw new RuntimeException("La empresa con CUIT " + cuitEmpresa + " no existe en el sistema.");
+	    }
 
-		if (!empresas.containsKey(cuit)) {
-			throw new IllegalArgumentException("La empresa no existe.");
-		}
-
-		if (!usuarios.containsKey(dni)) {
-			throw new IllegalArgumentException("El usuario no existe.");
-		}
-
-		Empresa empresa = empresas.get(cuit);
-
-		empresa.agregarPersonaAutorizada(dni);
+	    Empresa empresa = empresas.get(cuitEmpresa);
+	    
+	    empresa.agregarPersonaAutorizada(dniAutorizado);
 	}
 
 	@Override
