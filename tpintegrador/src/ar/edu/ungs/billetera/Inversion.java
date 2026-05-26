@@ -10,7 +10,7 @@ public abstract class Inversion extends Actividad {
 	private double tasa; // FL ahora tiene tasa
 	private boolean precancelada; // estado
 	private boolean precancelable; // regla de negocio
-	private LocalDate fechaVencimiento; // porque las inversiones tienen fecha de vencimiento
+	private LocalDate fechaVencimiento;
 
 	public Inversion(double monto, Cuenta origen, int id, int plazo, String activo, double tasa,
 			boolean precancelable) {
@@ -76,6 +76,6 @@ public abstract class Inversion extends Actividad {
 	}
 	
 	public void precancelar() {
-		precancelada = true;
+	    precancelada = true;
 	}
 }

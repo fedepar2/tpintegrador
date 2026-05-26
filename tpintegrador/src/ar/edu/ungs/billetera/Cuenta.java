@@ -49,7 +49,7 @@ public abstract class Cuenta {
 		destino.validarOperacion(monto);
 
 		saldo -= monto;
-		destino.saldo += monto;
+		destino.acreditar(monto);
 	}
 
 	public void registrarActividad(Actividad act) {
@@ -117,6 +117,13 @@ public abstract class Cuenta {
 
 	public double getMontoInvertido() {
 		return montoInvertido;
+	}
+
+	public void acreditar(double monto) {
+		if(monto <= 0) {
+			throw new RuntimeException("El monto a acreditar debe ser positivo.");
+		}
+		saldo += monto;
 	}
 
 }

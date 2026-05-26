@@ -12,16 +12,16 @@ public class CuentaPremium extends Cuenta {
 	protected void validarOperacion(double monto) {
 
 		if (monto <= 0) {
-			throw new RuntimeException("El monto de la operación debe ser mayor a cero.");
+			throw new IllegalArgumentException("El monto de la operación debe ser mayor a cero.");
 		}
 
 		if (getSaldo() < monto) {
-			throw new RuntimeException("Saldo insuficiente para realizar la operación.");
+			throw new IllegalArgumentException("Saldo insuficiente para realizar la operación.");
 		}
 
 		// validar saldo final
 		if (saldoTotal() - monto < MINIMO) {
-			throw new RuntimeException("Una cuenta premium no puede quedar debajo de $500.000.");
+			throw new IllegalArgumentException("Una cuenta premium no puede quedar debajo de $500.000.");
 		}
 	}
 

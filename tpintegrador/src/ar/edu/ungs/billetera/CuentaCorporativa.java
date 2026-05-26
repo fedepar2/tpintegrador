@@ -20,16 +20,16 @@ public class CuentaCorporativa extends Cuenta {
 	@Override
 	protected void validarOperacion(double monto) {
 	    if (monto <= 0) {
-	        throw new RuntimeException("El monto de la operación debe ser mayor a cero.");
+	        throw new IllegalArgumentException("El monto de la operación debe ser mayor a cero.");
 	    }
 
 	    if (getSaldo() < monto) {
-	        throw new RuntimeException("Saldo insuficiente para realizar la operación.");
+	        throw new IllegalArgumentException("Saldo insuficiente para realizar la operación.");
 	    }
 
 	    String dniTitular = getTitular().getDni();
 	    if (!empresa.estaAutorizado(dniTitular)) {
-	        throw new RuntimeException("El titular con DNI " + dniTitular + 
+	        throw new IllegalArgumentException("El titular con DNI " + dniTitular + 
 	                                   " no tiene autorización para operar esta cuenta corporativa.");
 	    }
 	}

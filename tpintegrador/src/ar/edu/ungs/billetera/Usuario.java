@@ -45,9 +45,6 @@ public class Usuario {
 	}
 
 	public void actualizarTotalInvertido(double monto) {
-		if (monto <= 0) {
-			throw new RuntimeException("El monto para actualizar el total invertido debe ser positivo.");
-		}
 		totalInvertido += monto;
 	}
 

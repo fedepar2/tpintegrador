@@ -1,5 +1,7 @@
 package ar.edu.ungs.billetera;
 
+import java.time.LocalDate;
+
 public class RentaFija extends Inversion {
 
 	public RentaFija(double monto, Cuenta origen, int id, int plazo,
@@ -55,4 +57,20 @@ public class RentaFija extends Inversion {
 	    return sb.toString();
 	}
 
+	@Override
+	public void precancelar() { //para testPrecancelarInversionRentaFija
+	    LocalDate fechaHoy = Utilitarios.hoy();
+	    LocalDate fechaCreacion = this.getFecha();
+
+	    long dias = fechaHoy.toEpochDay() - fechaCreacion.toEpochDay();
+
+	    double intereses = getMonto() * getTasa() / 365.0 * dias;
+
+	    double interesesAPagar = intereses / 2.0;
+
+	    double totalPesosAAcreditar = this.getMonto() + interesesAPagar;
+	    
+	    this.getOrigen().acreditar(totalPesosAAcreditar);
+	    super.precancelar(); 
+	}
 }

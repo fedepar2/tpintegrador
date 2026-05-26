@@ -1,5 +1,7 @@
 package ar.edu.ungs.billetera;
 
+import java.time.LocalDate;
+
 public class Divisa extends Inversion {
 
 	// Guarda la cotización del activo al momento
@@ -97,5 +99,30 @@ public class Divisa extends Inversion {
 
 	public double getCotizacionInicial() {
 		return cotizacionInicial;
+	}
+	
+	@Override
+	public void precancelar() { // para testPrecancelarInversionDivisa
+		LocalDate fechaHoy = Utilitarios.hoy();
+	    LocalDate fechaCreacion = getFecha();
+	    
+	    long dias = fechaHoy.toEpochDay() - fechaCreacion.toEpochDay();
+
+	    double capitalEnDivisa = getMontoEnDivisa(); 
+
+	    double intereses = capitalEnDivisa * (getTasa() / 365.0) * dias;
+	    
+	    // "se paga la mitad de la rentabilidad"
+	    double interesesAPagar = intereses / 2.0;
+	    
+	    double cotizacionHoy = Utilitarios.consultarCotizacion(getActivo());
+	    double totalPesosAAcreditar = (capitalEnDivisa + interesesAPagar) * cotizacionHoy;
+	    
+	    getOrigen().acreditar(totalPesosAAcreditar);
+	    super.precancelar();
+	}
+	
+	private double getMontoEnDivisa() {
+		return getMonto() / cotizacionInicial;
 	}
 }

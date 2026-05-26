@@ -8,7 +8,7 @@ import java.util.Map;
 public class Billetera implements IBilletera {
 
 	private Map<String, Usuario> usuarios; // dni : String
-	private Map<String, Cuenta> cuentas; // alias : String
+	private Map<String, Cuenta> cuentas; // cvu : String
 	private Map<String, Empresa> empresas; // cuit : String
 	private List<Actividad> actividades;
 	private Map<String, String> aliasToCvu; // alias -> cvu (agregado)
@@ -331,7 +331,7 @@ public class Billetera implements IBilletera {
 	                }
 
 	                // Lanza error si la inversión no está activa o no es precancelable [4]
-	                if (!inv.estaPrecancelada()) {
+	                if (inv.estaPrecancelada()) {
 	                    throw new RuntimeException("La inversión con ID " + idInversion + " ya fue precancelada.");
 	                }
 
@@ -340,6 +340,10 @@ public class Billetera implements IBilletera {
 	                }
 
 	                inv.precancelar();
+	                
+	                Usuario titular = usuarios.get(dni);
+	                
+	                titular.actualizarTotalInvertido(-inv.getMonto()); //solucion a testPrecancelarInversionDivisa
 	            }
 	        }
 	        
@@ -377,8 +381,20 @@ public class Billetera implements IBilletera {
 
 	@Override
 	public List<String> consultarHistorialCuenta(String cvu) { // punto 8
-		// TODO Auto-generated method stub
-		return null;
+		if (!cuentas.containsKey(cvu)) {
+	        throw new RuntimeException("La cuenta no existe.");
+	    }
+
+	    Cuenta cuenta = cuentas.get(cvu);
+	    
+	    List<String> historial = new ArrayList<>();
+
+	    for (Actividad act : cuenta.getActividades()) {
+
+	        historial.add(act.toString()); 
+	    }
+
+	    return historial;
 	}
 
 	@Override
@@ -407,8 +423,13 @@ public class Billetera implements IBilletera {
 
 	@Override
 	public double obtenerTotalInvertido(String dniUsuario) { // punto 9
-		// TODO Auto-generated method stub
-		return 0;
+	    if (!usuarios.containsKey(dniUsuario)) {
+	        throw new RuntimeException("El usuario con DNI " + dniUsuario + " no existe.");
+	    }
+
+	    Usuario titular = usuarios.get(dniUsuario);
+
+	    return titular.getTotalInvertido();
 	}
 
 	@Override
