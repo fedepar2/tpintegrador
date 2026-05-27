@@ -23,12 +23,10 @@ public class Billetera implements IBilletera {
 
 	// no modificar estos métodos
 	@Override
-	public void registrarEmpresa(String cuit, String nombreFantasia, String telefono, String email,
-			String nombreContacto) {
-
+	public void registrarEmpresa(String cuit, String nombreFantasia, String telefono,
+			                     String email, String nombreContacto) {
 		// validar parámetros
 		if (cuit == null || nombreFantasia == null || telefono == null || email == null || nombreContacto == null) {
-
 			throw new IllegalArgumentException("Todos los datos de la empresa son obligatorios.");
 		}
 
@@ -296,12 +294,16 @@ public class Billetera implements IBilletera {
 		if (cuenta == null) {
 			throw new IllegalArgumentException("La cuenta no existe.");
 		}
+		
+		if (monto < 20000000) { // necesario para Principal
+	        throw new IllegalArgumentException("La inversión en FLE requiere un capital mínimo de $20.000.000.");
+	    }
 
 		// validar tipo de cuenta
 		if (!(cuenta instanceof CuentaCorporativa)) {
 			throw new IllegalArgumentException("Solo las cuentas corporativas pueden invertir en fondos de liquidez.");
 		}
-
+		
 		// generar ID
 		int id = actividades.size() + 1;
 
@@ -457,43 +459,56 @@ public class Billetera implements IBilletera {
 
 	@Override
 	public List<String> cuentasConMayorVolumen(int cantidadTop) {
+	    if (cantidadTop <= 0) {
+	        throw new IllegalArgumentException("La cantidad a retornar debe ser positiva.");
+	    }
 
-		if (cantidadTop <= 0) {
-			throw new IllegalArgumentException("La cantidad debe ser positiva.");
-		}
+	    List<Cuenta> listaCuentas = new ArrayList<>(cuentas.values());
 
-		// convertir map de cuentas en lista
-		List<Cuenta> listaCuentas = new ArrayList<>(cuentas.values());
+	    // el método sort() de la propia lista usará el Comparable implementado en Cuenta
+	    listaCuentas.sort(null);
 
-		for (Cuenta c : listaCuentas) {
-			System.out.println(c.getCvu() + " -> " + c.getCantOperaciones());
-		}
+	    List<String> resultado = new ArrayList<>();
+	    int limite = Math.min(cantidadTop, listaCuentas.size());
+	    
+	    for (int i = 0; i < limite; i++) {
+	        Cuenta c = listaCuentas.get(i);
 
-		// ordenar de mayor a menor cantidad de operaciones
-		listaCuentas.sort((c1, c2) -> Integer.compare(c2.getCantOperaciones(), c1.getCantOperaciones()));
+	        resultado.add(c.toString());
+	    }
 
-		System.out.println("ORDENADO:");
-
-		for (Cuenta c : listaCuentas) {
-			System.out.println(c.getCvu() + " -> " + c.getCantOperaciones());
-		}
-
-		List<String> resultado = new ArrayList<>();
-
-		// tomar top N
-		for (int i = 0; i < cantidadTop && i < listaCuentas.size(); i++) {
-
-			resultado.add(listaCuentas.get(i).toString());
-		}
-
-		return resultado;
+	    return resultado;
 	}
 
-	// Se debe poder imprimir “Billetera” mostrando sus datos en formato adecuado
-	// para poder comprenderlo.
 	@Override
 	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("=========================================\n");
+		sb.append("      ESTADO SISTEMA BILLETE.AR          \n");
+		sb.append("=========================================\n");
 
-		return null;
+		sb.append("[USUARIOS REGISTRADOS]\n");
+		if(!usuarios.isEmpty()) {
+			for (Usuario u : usuarios.values()) {
+				sb.append(u.toString()).append("\n");
+			}
+		}
+		else {
+			sb.append("Ninguno.\n");
+		}
+
+		sb.append("\n[EMPRESAS Y ENTIDADES]\n");
+		if(!usuarios.isEmpty()) {
+			for (Empresa e : empresas.values()) {
+				sb.append(e.toString()).append("\n");
+			}
+		}
+		else {
+			sb.append("Ninguno.\n");
+		}
+		
+		sb.append("=========================================");
+		
+		return sb.toString();
 	}
 }

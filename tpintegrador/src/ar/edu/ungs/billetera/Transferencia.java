@@ -34,34 +34,33 @@ public class Transferencia extends Actividad {
 	@Override
 	public String toString() {
 	    StringBuilder sb = new StringBuilder();
-	    
 	    sb.append("Transferencia:\n");
 	    
-	    sb.append("fecha: ");
+	    sb.append("■ fecha: ");
 	    sb.append(getFecha());
 	    sb.append("\n");
 	    
-	    sb.append("origen: ");
+	    sb.append("  origen: ");
 	    sb.append(getOrigen().getTitular().getDni());
 	    sb.append(" (");
 	    sb.append(getOrigen().getCvu());
 	    sb.append(")\n");
 	    
-	    sb.append("destino: ");
+	    sb.append("  destino: ");
 	    sb.append(getDestino().getTitular().getDni());
 	    sb.append(" (");
 	    sb.append(getDestino().getCvu());
 	    sb.append(")\n");
 	    
-	    sb.append("monto: ");
+	    sb.append("  monto: ");
 	    sb.append(getMonto());
 	    sb.append("\n");
 	    
 	    if (getAprobada()) {
-	        sb.append("[Aprobado]");
+	        sb.append("  [Aprobado]");
 	    }
 	    else {
-	        sb.append("[Rechazado]");
+	        sb.append("  [Rechazado]");
 	    }
 	    
 	    return sb.toString();

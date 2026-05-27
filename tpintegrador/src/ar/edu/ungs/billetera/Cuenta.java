@@ -3,7 +3,7 @@ package ar.edu.ungs.billetera;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Cuenta {
+public abstract class Cuenta implements Comparable<Cuenta>{
 
 	private String cvu; // cvu de 22 digitos...
 	private String alias;
@@ -80,7 +80,7 @@ public abstract class Cuenta {
 	}
 
 	@Override
-	public String toString() { // o debería ser abstracto?
+	public String toString() {
 		StringBuilder sb = new StringBuilder();
 
 		sb.append(getClass().getSimpleName().replace("Cuenta", "")); // tipo de cuenta concreta
@@ -127,5 +127,14 @@ public abstract class Cuenta {
 		}
 		saldo += monto;
 	}
+	
+	@Override
+    public int compareTo(Cuenta otra) {
+
+        int misOper = this.getCantOperaciones();
+        int otrasOper = otra.getCantOperaciones();
+
+        return Integer.compare(otrasOper, misOper); //el orden importa
+    }
 
 }

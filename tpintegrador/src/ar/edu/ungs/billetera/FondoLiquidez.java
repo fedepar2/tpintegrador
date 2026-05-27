@@ -11,8 +11,6 @@ public class FondoLiquidez extends Inversion {
 
 	public FondoLiquidez(double monto, Cuenta origen, int id, int plazo) {
 
-		// Los fondos de liquidez NO son precancelables
-		// HABRÍA QUE VERIFICAR QUE CUENTA ORIGEN SEA SOLO UNA CUENTA CORPORATIVA
 		super(monto, origen, id, plazo, ACTIVO, TASA, false);
 	}
 
@@ -47,30 +45,34 @@ public class FondoLiquidez extends Inversion {
 
 	@Override
 	public String toString() {
-
 		StringBuilder sb = new StringBuilder();
+		sb.append("Inversion:\n");
+		
+		sb.append("■ fecha: ");
+		sb.append(getFecha());
+		sb.append("\n");
 
-		sb.append("origen: ");
+		sb.append("  origen: ");
 		sb.append(getOrigen().getTitular().getDni());
 		sb.append(" (");
 		sb.append(getOrigen().getCvu());
 		sb.append(")\n");
 
-		sb.append("desc: Fondo de Liquidez\n");
-
-		sb.append("monto: ");
+		sb.append("  desc: Fondo de Liquidez Empresarial\n");
+		
+		sb.append("  monto: ");
 		sb.append(getMonto());
 		sb.append("\n");
 
-		sb.append("plazo: ");
+		sb.append("  plazo: ");
 		sb.append(getPlazo());
 		sb.append("\n");
 
 		if (getAprobada()) {
-			sb.append("[Aprobado]");
+			sb.append("  [Aprobado]");
 		}
 		else {
-		    sb.append("[Rechazado]");
+			sb.append("  [Rechazado]");
 		}
 
 		return sb.toString();

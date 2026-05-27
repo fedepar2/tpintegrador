@@ -24,10 +24,6 @@ public class Empresa {
 	// cuentas corporativas indexadas por CVU
 	private Map<String, CuentaCorporativa> cuentasCorporativas; // la clave seria el cvu de la cuenta coorporativa
 
-	// ========================
-	// CONSTRUCTOR
-	// ========================
-
 	public Empresa(String cuit, String nombreFantasia, String telefono, String email, String nombreContacto) {
 
 		if (cuit == null || cuit.isBlank()) { // verifica que no este vacia o no contenga espacios vacios
@@ -90,12 +86,7 @@ public class Empresa {
 		return new HashSet<>(personasAutorizadas);
 	}
 
-	// ========================
-	// CUENTAS CORPORATIVAS
-	// ========================
-
 	public void agregarCuentaCorporativa(CuentaCorporativa cuenta) {
-
 		if (cuenta == null) {
 			throw new IllegalArgumentException("Cuenta invalida");
 		}
@@ -104,46 +95,16 @@ public class Empresa {
 	}
 
 	public CuentaCorporativa obtenerCuenta(String cvu) {
-
 		return cuentasCorporativas.get(cvu);
 	}
 
 	public Collection<CuentaCorporativa> obtenerCuentasCorporativas() {
-
 		return cuentasCorporativas.values();
 	}
 
-	// ========================
-	// GETTERS
-	// ========================
-
-	public String getCuit() {
-		return cuit;
-	}
-
-	public String getNombreFantasia() {
-		return nombreFantasia;
-	}
-
-	public String getTelefono() {
-		return telefono;
-	}
-
-	public String getEmail() {
-		return email;
-	}
 
 	public String getNombreContacto() {
 		return nombreContacto;
 	}
 
-	// ========================
-	// TOSTRING
-	// ========================
-
-	@Override
-	public String toString() {
-
-		return nombreFantasia + " (CUIT: " + cuit + ")";
-	}
 }

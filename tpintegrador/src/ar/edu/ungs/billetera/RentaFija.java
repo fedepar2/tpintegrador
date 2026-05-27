@@ -12,7 +12,7 @@ public class RentaFija extends Inversion {
 
 	@Override
 	public double calcularRendimiento() {
-		return this.getMonto() * this.getTasa();
+		return getMonto() * getTasa();
 	}
 
 	@Override
@@ -27,30 +27,33 @@ public class RentaFija extends Inversion {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-
-		sb.append("inversion: fecha: ");
-		sb.append(this.getFecha());
+		sb.append("Inversion:\n");
+		
+		sb.append("■ fecha: ");
+		sb.append(getFecha());
 		sb.append("\n");
 
-		sb.append("origen: ");
-		sb.append(this.getOrigen().getTitular().getDni());
+		sb.append("  origen: ");
+		sb.append(getOrigen().getTitular().getDni());
 		sb.append(" (");
-		sb.append(this.getOrigen().getCvu());
+		sb.append(getOrigen().getCvu());
 		sb.append(")\n");
 
-		sb.append("desc: Renta Fija\n");
-		sb.append("monto: ");
-		sb.append(this.getMonto());
+		sb.append("  desc: Renta fija\n");
+		
+		sb.append("  monto: ");
+		sb.append(getMonto());
 		sb.append("\n");
 
-		sb.append("plazo: ");
-		sb.append(this.getPlazo());
+		sb.append("  plazo: ");
+		sb.append(getPlazo());
 		sb.append("\n");
 
 		if (getAprobada()) {
-			sb.append("[Aprobado]");
-		} else {
-			sb.append("[Rechazado]");
+			sb.append("  [Aprobado]");
+		}
+		else {
+			sb.append("  [Rechazado]");
 		}
 
 		return sb.toString();
@@ -63,7 +66,7 @@ public class RentaFija extends Inversion {
 
 		long dias = fechaHoy.toEpochDay() - fechaCreacion.toEpochDay();
 
-		double intereses = getMonto() * getTasa() / 365.0 * dias;
+		double intereses = calcularRendimiento() / 365.0 * dias;
 
 		double interesesAPagar = intereses / 2.0;
 

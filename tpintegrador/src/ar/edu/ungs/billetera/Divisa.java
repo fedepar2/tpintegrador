@@ -38,13 +38,17 @@ public class Divisa extends Inversion {
 
 	@Override
 	public double calcularRendimiento() {
-		// Obtiene la cotización actual del activo.
-		double cotizacionActual = Utilitarios.consultarCotizacion(getActivo());
-		// Calcula la variación porcentual del activo.
-		double variacion = (cotizacionActual - cotizacionInicial) / cotizacionInicial;
+		
+		LocalDate fechaHoy = Utilitarios.hoy();
+	    LocalDate fechaCreacion = getFecha();
+	    
+	    long dias = fechaHoy.toEpochDay() - fechaCreacion.toEpochDay();
 
-		// rendimiento por variación + tasa
-		return getMonto() * (variacion + getTasa());
+	    double capitalEnDivisa = getMonto() / cotizacionInicial; 
+
+	    double intereses = capitalEnDivisa * (getTasa() / 365.0) * dias;
+	    
+	    return intereses;
 	}
 
 	@Override
@@ -66,32 +70,34 @@ public class Divisa extends Inversion {
 
 	@Override
 	public String toString() {
-
 		StringBuilder sb = new StringBuilder();
+		sb.append("Inversion:\n");
 
-		sb.append("origen: ");
+		sb.append("■ fecha: ");
+		sb.append(getFecha());
+		sb.append("\n");
+
+		sb.append("  origen: ");
 		sb.append(getOrigen().getTitular().getDni());
 		sb.append(" (");
 		sb.append(getOrigen().getCvu());
 		sb.append(")\n");
 
-		sb.append("desc: Inversion Divisa ");
-		sb.append(getActivo());
-		sb.append("\n");
-
-		sb.append("monto: ");
+		sb.append("  desc: Vinculada a Divisa\n");
+		
+		sb.append("  monto: ");
 		sb.append(getMonto());
 		sb.append("\n");
 
-		sb.append("plazo: ");
+		sb.append("  plazo: ");
 		sb.append(getPlazo());
 		sb.append("\n");
 
 		if (getAprobada()) {
-			sb.append("[Aprobado]");
+			sb.append("  [Aprobado]");
 		}
 		else {
-		    sb.append("[Rechazado]");
+			sb.append("  [Rechazado]");
 		}
 
 		return sb.toString();
@@ -102,27 +108,16 @@ public class Divisa extends Inversion {
 	}
 	
 	@Override
-	public void precancelar() { // para testPrecancelarInversionDivisa
-		LocalDate fechaHoy = Utilitarios.hoy();
-	    LocalDate fechaCreacion = getFecha();
-	    
-	    long dias = fechaHoy.toEpochDay() - fechaCreacion.toEpochDay();
+	public void precancelar() {
 
-	    double capitalEnDivisa = getMontoEnDivisa(); 
-
-	    double intereses = capitalEnDivisa * (getTasa() / 365.0) * dias;
-	    
-	    // "se paga la mitad de la rentabilidad"
-	    double interesesAPagar = intereses / 2.0;
+	    double interesesAPagar = calcularRendimiento() / 2;
 	    
 	    double cotizacionHoy = Utilitarios.consultarCotizacion(getActivo());
+	    double capitalEnDivisa = getMonto() / cotizacionInicial; 
+	    
 	    double totalPesosAAcreditar = (capitalEnDivisa + interesesAPagar) * cotizacionHoy;
 	    
 	    getOrigen().acreditar(totalPesosAAcreditar);
 	    super.precancelar();
-	}
-	
-	private double getMontoEnDivisa() {
-		return getMonto() / cotizacionInicial;
 	}
 }
