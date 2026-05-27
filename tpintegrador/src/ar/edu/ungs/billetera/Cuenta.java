@@ -35,6 +35,7 @@ public abstract class Cuenta {
 	}
 
 	protected abstract void validarInversion(double monto);
+
 	protected abstract void validarTransferencia(double monto);
 
 	public void transferir(Cuenta destino, double monto) {
@@ -121,7 +122,7 @@ public abstract class Cuenta {
 	}
 
 	public void acreditar(double monto) {
-		if(monto <= 0) {
+		if (monto <= 0) {
 			throw new RuntimeException("El monto a acreditar debe ser positivo.");
 		}
 		saldo += monto;

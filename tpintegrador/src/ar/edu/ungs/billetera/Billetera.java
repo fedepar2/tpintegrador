@@ -46,13 +46,13 @@ public class Billetera implements IBilletera {
 
 	@Override
 	public void agregarPersonaAutorizada(String cuitEmpresa, String dniAutorizado) {
-	    if (!empresas.containsKey(cuitEmpresa)) {
-	        throw new RuntimeException("La empresa con CUIT " + cuitEmpresa + " no existe en el sistema.");
-	    }
+		if (!empresas.containsKey(cuitEmpresa)) {
+			throw new RuntimeException("La empresa con CUIT " + cuitEmpresa + " no existe en el sistema.");
+		}
 
-	    Empresa empresa = empresas.get(cuitEmpresa);
-	    
-	    empresa.agregarPersonaAutorizada(dniAutorizado);
+		Empresa empresa = empresas.get(cuitEmpresa);
+
+		empresa.agregarPersonaAutorizada(dniAutorizado);
 	}
 
 	@Override
@@ -373,8 +373,10 @@ public class Billetera implements IBilletera {
 		}
 
 		if (!encontrada) {
-			throw new RuntimeException(
-					"No se encontró la inversión con ID " + idInversion + " en la cuenta especificada.");
+
+			System.out.println("No se encontró la inversión con ID " + idInversion + " en la cuenta especificada.");
+
+			return;
 		}
 	}
 
