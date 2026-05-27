@@ -19,27 +19,24 @@ public class FondoLiquidez extends Inversion {
 
 		// El monto debe ser positivo
 		if (getMonto() <= 0) {
-			throw new RuntimeException("Monto invalido.");
+			throw new IllegalArgumentException("Monto invalido.");
 		}
 
 		// Verifica saldo suficiente
 		if (getMonto() > getOrigen().getSaldo()) {
-			throw new RuntimeException("Saldo insuficiente.");
+			throw new IllegalArgumentException("Saldo insuficiente.");
 		}
 
 		// Verifica monto mínimo requerido
 		if (getMonto() < MINIMO) {
-			throw new RuntimeException("El monto minimo para Fondo Liquidez es " + MINIMO);
+			throw new IllegalArgumentException("El monto minimo para Fondo Liquidez es " + MINIMO);
 		}
-		//this.getOrigen().validarOperacion(this.getMonto());
+		
+		this.getOrigen().validarInversion(this.getMonto());
 	}
 
 	@Override
 	public double calcularRendimiento() {
-
-		// Fondo de liquidez:
-		// rendimiento simple por tasa fija
-
 		return getMonto() * getTasa();
 	}
 

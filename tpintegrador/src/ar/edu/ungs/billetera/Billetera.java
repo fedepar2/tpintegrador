@@ -11,17 +11,16 @@ public class Billetera implements IBilletera {
 	private Map<String, Cuenta> cuentas; // cvu : String
 	private Map<String, Empresa> empresas; // cuit : String
 	private List<Actividad> actividades;
-	private Map<String, String> aliasToCvu; // alias -> cvu (agregado)
+	private Map<String, String> aliasToCvu; // alias -> cvu
 
 	public Billetera() {
 		this.usuarios = new HashMap<>();
 		this.cuentas = new HashMap<>();
 		this.empresas = new HashMap<>();
 		this.actividades = new ArrayList<>();
-		this.aliasToCvu = new HashMap<>(); // agregado
+		this.aliasToCvu = new HashMap<>();
 	}
 
-	// no modificar estos métodos
 	@Override
 	public void registrarEmpresa(String cuit, String nombreFantasia, String telefono,
 			                     String email, String nombreContacto) {
@@ -45,7 +44,7 @@ public class Billetera implements IBilletera {
 	@Override
 	public void agregarPersonaAutorizada(String cuitEmpresa, String dniAutorizado) {
 		if (!empresas.containsKey(cuitEmpresa)) {
-			throw new RuntimeException("La empresa con CUIT " + cuitEmpresa + " no existe en el sistema.");
+			throw new IllegalArgumentException("La empresa con CUIT " + cuitEmpresa + " no existe en el sistema.");
 		}
 
 		Empresa empresa = empresas.get(cuitEmpresa);
@@ -58,7 +57,7 @@ public class Billetera implements IBilletera {
 		// el interfaz dice verificar si son invalidos pero el constructor ya hace
 		// eso...
 		if (usuarios.containsKey(dni)) {
-			throw new RuntimeException("El usuario con DNI " + dni + " ya se encuentra registrado.");
+			throw new IllegalArgumentException("El usuario con DNI " + dni + " ya se encuentra registrado.");
 		}
 
 		Usuario nuevoUsuario = new Usuario(dni, nombre, telefono, email);
@@ -69,12 +68,12 @@ public class Billetera implements IBilletera {
 	public String crearCuentaRegular(String dniUsuario, String alias) {
 
 		if (!usuarios.containsKey(dniUsuario)) {
-			throw new RuntimeException("El usuario con DNI " + dniUsuario + " no existe.");
+			throw new IllegalArgumentException("El usuario con DNI " + dniUsuario + " no existe.");
 		}
 
 		// ahora validamos alias en el nuevo map
 		if (aliasToCvu.containsKey(alias)) {
-			throw new RuntimeException("La cuenta con alias " + alias + " ya existe.");
+			throw new IllegalArgumentException("La cuenta con alias " + alias + " ya existe.");
 		}
 
 		Usuario titular = usuarios.get(dniUsuario);
@@ -134,24 +133,24 @@ public class Billetera implements IBilletera {
 
 		// Verifica que el usuario exista
 		if (!usuarios.containsKey(dniUsuario)) {
-			throw new RuntimeException("El usuario con DNI " + dniUsuario + " no existe.");
+			throw new IllegalArgumentException("El usuario con DNI " + dniUsuario + " no existe.");
 		}
 
 		// Verifica que el alias no esté repetido
 		if (aliasToCvu.containsKey(alias)) {
-			throw new RuntimeException("El alias " + alias + " ya se encuentra registrado.");
+			throw new IllegalArgumentException("El alias " + alias + " ya se encuentra registrado.");
 		}
 
 		// Verifica que la empresa exista
 		if (!empresas.containsKey(cuitEmpresa)) {
-			throw new RuntimeException("La empresa con CUIT " + cuitEmpresa + " no existe.");
+			throw new IllegalArgumentException("La empresa con CUIT " + cuitEmpresa + " no existe.");
 		}
 
 		Empresa empresa = empresas.get(cuitEmpresa);
 
 		// Verifica autorización del usuario
 		if (!empresa.estaAutorizado(dniUsuario)) {
-			throw new RuntimeException("El usuario no está autorizado por la empresa.");
+			throw new IllegalArgumentException("El usuario no está autorizado por la empresa.");
 		}
 
 		// Obtiene usuario titular
@@ -179,7 +178,7 @@ public class Billetera implements IBilletera {
 	@Override
 	public List<String> obtenerCuentas(String dniUsuario) { // punto 3
 		if (!usuarios.containsKey(dniUsuario)) {
-			throw new RuntimeException("El usuario con DNI " + dniUsuario + " no existe."); // [4, 5]
+			throw new IllegalArgumentException("El usuario con DNI " + dniUsuario + " no existe."); // [4, 5]
 		}
 
 		Usuario titular = usuarios.get(dniUsuario);
@@ -196,11 +195,11 @@ public class Billetera implements IBilletera {
 	@Override
 	public double obtenerSaldoDisponible(String cvu) { // punto 4
 		if (cvu == null || cvu.trim().isEmpty()) {
-			throw new RuntimeException("El CVU proporcionado es inválido.");
+			throw new IllegalArgumentException("El CVU proporcionado es inválido.");
 		}
 
 		if (!cuentas.containsKey(cvu)) {
-			throw new RuntimeException("La cuenta con CVU " + cvu + " no existe.");
+			throw new IllegalArgumentException("La cuenta con CVU " + cvu + " no existe.");
 		}
 
 		Cuenta cuenta = cuentas.get(cvu);
@@ -322,15 +321,15 @@ public class Billetera implements IBilletera {
 	@Override
 	public void precancelarInversion(String dni, String cvu, int idInversion) { // punto 13
 		if (dni == null || cvu == null || dni.isEmpty() || cvu.isEmpty()) {
-			throw new RuntimeException("Los datos de identificación no pueden ser nulos o vacíos.");
+			throw new IllegalArgumentException("Los datos de identificación no pueden ser nulos o vacíos.");
 		}
 
 		if (!usuarios.containsKey(dni)) {
-			throw new RuntimeException("El usuario con DNI " + dni + " no existe.");
+			throw new IllegalArgumentException("El usuario con DNI " + dni + " no existe.");
 		}
 
 		if (!cuentas.containsKey(cvu)) {
-			throw new RuntimeException("La cuenta con CVU " + cvu + " no existe.");
+			throw new IllegalArgumentException("La cuenta con CVU " + cvu + " no existe.");
 		}
 
 		Cuenta cuenta = cuentas.get(cvu);
@@ -349,16 +348,16 @@ public class Billetera implements IBilletera {
 					encontrada = true;
 					// verificación de seguridad
 					if (!inv.getOrigen().getTitular().getDni().equals(dni)) {
-						throw new RuntimeException("La inversión no pertenece al usuario indicado.");
+						throw new IllegalArgumentException("La inversión no pertenece al usuario indicado.");
 					}
 
 					// Lanza error si la inversión no está activa o no es precancelable [4]
 					if (inv.estaPrecancelada()) {
-						throw new RuntimeException("La inversión con ID " + idInversion + " ya fue precancelada.");
+						throw new IllegalArgumentException("La inversión con ID " + idInversion + " ya fue precancelada.");
 					}
 
 					if (!inv.getPrecancelable()) {
-						throw new RuntimeException("Este tipo de inversión no admite precancelación anticipada.");
+						throw new IllegalArgumentException("Este tipo de inversión no admite precancelación anticipada.");
 					}
 
 					inv.precancelar();
@@ -407,7 +406,7 @@ public class Billetera implements IBilletera {
 	@Override
 	public List<String> consultarHistorialCuenta(String cvu) { // punto 8
 		if (!cuentas.containsKey(cvu)) {
-			throw new RuntimeException("La cuenta no existe.");
+			throw new IllegalArgumentException("La cuenta no existe.");
 		}
 
 		Cuenta cuenta = cuentas.get(cvu);
@@ -449,7 +448,7 @@ public class Billetera implements IBilletera {
 	@Override
 	public double obtenerTotalInvertido(String dniUsuario) { // punto 9
 		if (!usuarios.containsKey(dniUsuario)) {
-			throw new RuntimeException("El usuario con DNI " + dniUsuario + " no existe.");
+			throw new IllegalArgumentException("El usuario con DNI " + dniUsuario + " no existe.");
 		}
 
 		Usuario titular = usuarios.get(dniUsuario);
@@ -490,7 +489,8 @@ public class Billetera implements IBilletera {
 		sb.append("[USUARIOS REGISTRADOS]\n");
 		if(!usuarios.isEmpty()) {
 			for (Usuario u : usuarios.values()) {
-				sb.append(u.toString()).append("\n");
+				sb.append(u.toString());
+				sb.append("\n");
 			}
 		}
 		else {
@@ -500,7 +500,8 @@ public class Billetera implements IBilletera {
 		sb.append("\n[EMPRESAS Y ENTIDADES]\n");
 		if(!usuarios.isEmpty()) {
 			for (Empresa e : empresas.values()) {
-				sb.append(e.toString()).append("\n");
+				sb.append(e.toString());
+				sb.append("\n");
 			}
 		}
 		else {

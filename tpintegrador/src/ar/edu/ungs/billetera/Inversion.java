@@ -4,22 +4,21 @@ import java.time.LocalDate;
 
 public abstract class Inversion extends Actividad {
 
-	private int idInversion; // para punto 13
+	private int idInversion;
 	private int plazo;
-	private String activo; // para consultar y actualizar cotización...
-	private double tasa; // FL ahora tiene tasa
+	private String activo;
+	private double tasa; // FL tiene tasa
 	private boolean precancelada; // estado
 	private boolean precancelable; // regla de negocio
-	private LocalDate fechaVencimiento;
 
 	public Inversion(double monto, Cuenta origen, int id, int plazo, String activo, double tasa,
 			boolean precancelable) {
 		super(monto, origen);
 		if (id <= 0 || plazo <= 0 || tasa < 0) {
-			throw new RuntimeException("ID, plazo y tasa son obligatorios.");
+			throw new IllegalArgumentException("ID, plazo y tasa son obligatorios.");
 		}
 		if (activo == null) {
-			throw new RuntimeException("Un activo y tipo de inversión son obligatorios.");
+			throw new IllegalArgumentException("Un activo y tipo de inversión son obligatorios.");
 		}
 		this.idInversion = id;
 		this.plazo = plazo;
@@ -27,21 +26,21 @@ public abstract class Inversion extends Actividad {
 		this.tasa = tasa;
 		this.precancelada = false;
 		this.precancelable = precancelable;
-		this.fechaVencimiento = getFecha().plusDays(plazo); // se usa para calcular la fecha de vencimiento de la
-															// inversion
 	}
 
 	@Override
-	public void ejecutar() { // no es abstracto porque sirve para cualquier tipo de inversion
+	public void ejecutar() { // sirve para cualquier tipo de inversion
 		try {
+			validarInversion();
 			getOrigen().invertir(this);
 			aprobar();
 
-		} catch (RuntimeException e) {
+		} catch (IllegalArgumentException e) {
 			rechazar();
 			throw e;
-		} finally {
-			this.getOrigen().registrarActividad(this);
+		}
+		finally {
+			getOrigen().registrarActividad(this);
 		}
 	}
 

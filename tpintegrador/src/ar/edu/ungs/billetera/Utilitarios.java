@@ -3,7 +3,7 @@ package ar.edu.ungs.billetera;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
-import java.lang.RuntimeException;
+import java.lang.IllegalArgumentException;
 
 /**
  * Clase auxiliar para obtener la fecha actual.
@@ -64,7 +64,7 @@ public class Utilitarios {
      */
     public static double consultarCotizacion(String activo) {
         if (!sCotizaciones.containsKey(activo))
-            throw new RuntimeException("El activo '" + activo + "' no está registrado.");
+            throw new IllegalArgumentException("El activo '" + activo + "' no está registrado.");
 
         return sCotizaciones.get(activo);
     }

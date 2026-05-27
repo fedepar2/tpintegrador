@@ -8,10 +8,6 @@ import java.util.Set;
 
 public class Empresa {
 
-	// ========================
-	// ATRIBUTOS
-	// ========================
-
 	private String cuit;
 	private String nombreFantasia;
 	private String telefono;
@@ -26,23 +22,23 @@ public class Empresa {
 
 	public Empresa(String cuit, String nombreFantasia, String telefono, String email, String nombreContacto) {
 
-		if (cuit == null || cuit.isBlank()) { // verifica que no este vacia o no contenga espacios vacios
+		if (cuit == null || cuit.isEmpty()) { // verifica que no este vacia o no contenga espacios vacios
 			throw new IllegalArgumentException("CUIT invalido");
 		}
 
-		if (nombreFantasia == null || nombreFantasia.isBlank()) {
+		if (nombreFantasia == null || nombreFantasia.isEmpty()) {
 			throw new IllegalArgumentException("Nombre fantasia invalido");
 		}
 
-		if (telefono == null || telefono.isBlank()) {
+		if (telefono == null || telefono.isEmpty()) {
 			throw new IllegalArgumentException("Telefono invalido");
 		}
 
-		if (email == null || email.isBlank()) {
+		if (email == null || email.isEmpty()) {
 			throw new IllegalArgumentException("Email invalido");
 		}
 
-		if (nombreContacto == null || nombreContacto.isBlank()) {
+		if (nombreContacto == null || nombreContacto.isEmpty()) {
 			throw new IllegalArgumentException("Nombre contacto invalido");
 		}
 
@@ -55,10 +51,6 @@ public class Empresa {
 		this.personasAutorizadas = new HashSet<>();
 		this.cuentasCorporativas = new HashMap<>();
 	}
-
-	// ========================
-	// AUTORIZADOS
-	// ========================
 
 	public void agregarPersonaAutorizada(String dni) {
 
@@ -102,6 +94,21 @@ public class Empresa {
 		return cuentasCorporativas.values();
 	}
 
+	public String getCuit() {
+		return cuit;
+	}
+	
+	public String getNomFantasia() {
+		return nombreFantasia;
+	}
+	
+	public String getTelefono() {
+		return telefono;
+	}
+	
+	public String getEmail() {
+		return email;
+	}
 
 	public String getNombreContacto() {
 		return nombreContacto;

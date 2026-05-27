@@ -5,25 +5,25 @@ import java.util.List;
 
 public abstract class Cuenta implements Comparable<Cuenta>{
 
-	private String cvu; // cvu de 22 digitos...
+	private String cvu;
 	private String alias;
-	private Usuario titular; // para el toString()
+	private Usuario titular;
 	private double saldo;
 	private List<Actividad> actividades;
 	private int cantidadOperaciones;
-	private double montoInvertido; // para que punto 9 sea O(1)
+	private double montoInvertido;
 
-	public Cuenta(String alias, double depositoInicial, Usuario titular) { // elimine el atributo cvu por que ya que lo
-																			// crea utilitarios
-		if (alias == null || alias.trim().isEmpty()) { // separamos validaciones para incluir formato
-			throw new RuntimeException("Alias invalido.");
+	public Cuenta(String alias, double depositoInicial, Usuario titular) {
+
+		if (alias == null || alias.isEmpty()) {
+			throw new IllegalArgumentException("Alias invalido.");
 		}
 		if (titular == null) {
-			throw new RuntimeException("Titular invalido.");
+			throw new IllegalArgumentException("Titular invalido.");
 		}
 
 		if (depositoInicial < 0) {
-			throw new RuntimeException("El depósito inicial no puede ser negativo.");
+			throw new IllegalArgumentException("El depósito inicial no puede ser negativo.");
 		}
 		this.cvu = Utilitarios.generarSiguienteCvu(); // utilitarios genera los cvus
 		this.alias = alias;
@@ -31,7 +31,7 @@ public abstract class Cuenta implements Comparable<Cuenta>{
 		this.titular = titular;
 		this.actividades = new ArrayList<>();
 		this.cantidadOperaciones = 0;
-		this.montoInvertido = 0; // por claridad
+		this.montoInvertido = 0;
 	}
 
 	protected abstract void validarInversion(double monto);
@@ -40,14 +40,7 @@ public abstract class Cuenta implements Comparable<Cuenta>{
 
 	public void transferir(Cuenta destino, double monto) {
 
-		if (monto <= 0) {
-			throw new IllegalArgumentException("Monto invalido.");
-		}
-
-		if (this.getSaldo() < monto) {
-			throw new IllegalStateException("Saldo insuficiente.");
-		}
-
+		validarTransferencia(monto);
 		destino.validarTransferencia(monto);
 
 		saldo -= monto;
@@ -55,13 +48,15 @@ public abstract class Cuenta implements Comparable<Cuenta>{
 	}
 
 	public void registrarActividad(Actividad act) {
-		if (act != null) {
+		if (act == null) {
+			throw new IllegalStateException("La actividad debe existir.");
+		}
+		else {
 			actividades.add(act);
 			if (act.getAprobada()) {
 				cantidadOperaciones++;
 			}
 		}
-		// añadir excepción?
 	}
 
 	public double saldoTotal() { // deposito más el invertido
@@ -109,7 +104,7 @@ public abstract class Cuenta implements Comparable<Cuenta>{
 		return titular;
 	}
 
-	public List<Actividad> getActividades() { // reemplace el metodo para no dejar expuesto al objeto actividades
+	public List<Actividad> getActividades() { // para no dejar expuesto al objeto actividades
 		return new ArrayList<>(actividades);
 	}
 
@@ -123,7 +118,7 @@ public abstract class Cuenta implements Comparable<Cuenta>{
 
 	public void acreditar(double monto) {
 		if (monto <= 0) {
-			throw new RuntimeException("El monto a acreditar debe ser positivo.");
+			throw new IllegalArgumentException("El monto a acreditar debe ser positivo.");
 		}
 		saldo += monto;
 	}

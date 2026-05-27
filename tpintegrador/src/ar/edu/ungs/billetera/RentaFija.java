@@ -7,7 +7,6 @@ public class RentaFija extends Inversion {
 	public RentaFija(double monto, Cuenta origen, int id, int plazo, String activo, double tasa,
 			boolean precancelable) {
 		super(monto, origen, id, plazo, activo, tasa, precancelable);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
@@ -18,9 +17,9 @@ public class RentaFija extends Inversion {
 	@Override
 	public void validarInversion() {
 		if (this.getMonto() <= 0) {
-			throw new RuntimeException("Monto invalido.");
+			throw new IllegalArgumentException("Monto invalido.");
 		}
-		// Delegamos la validación de fondos a la cuenta origen (bajo acoplamiento)
+
 		this.getOrigen().validarInversion(this.getMonto());
 	}
 
@@ -60,7 +59,7 @@ public class RentaFija extends Inversion {
 	}
 
 	@Override
-	public void precancelar() { // para testPrecancelarInversionRentaFija
+	public void precancelar() {
 		LocalDate fechaHoy = Utilitarios.hoy();
 		LocalDate fechaCreacion = this.getFecha();
 

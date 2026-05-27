@@ -6,19 +6,19 @@ public abstract class Actividad {
 
 	private LocalDate fecha;
 	private double monto;
-	private Cuenta origen; // por el toString(); necesario para inversión
-	private boolean aprobada; // por el toString(); necesario para transferenca
+	private Cuenta origen;
+	private boolean aprobada;
 
 	public Actividad(double monto, Cuenta origen) {
 		if (monto <= 0) {
-			throw new RuntimeException("Monto invalido.");
+			throw new IllegalArgumentException("Monto invalido.");
 		}
 
 		if (origen == null) {
-			throw new RuntimeException("Cuenta origen invalida.");
+			throw new IllegalArgumentException("Cuenta origen invalida.");
 		}
 
-		this.fecha = Utilitarios.hoy(); // uso de la clase Utilitarios
+		this.fecha = Utilitarios.hoy();
 		this.monto = monto;
 		this.origen = origen;
 		this.aprobada = false; // se marca como aprobada tras la ejecución exitosa
@@ -26,7 +26,7 @@ public abstract class Actividad {
 
 	public abstract void ejecutar();
 
-	public abstract String toString(); // hace falta?
+	public abstract String toString();
 
 	public LocalDate getFecha() {
 		return fecha;

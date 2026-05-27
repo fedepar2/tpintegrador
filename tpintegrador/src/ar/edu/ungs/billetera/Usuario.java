@@ -7,7 +7,7 @@ import java.util.Map;
 
 public class Usuario {
 
-	private String dni; // antes lo llamabamos "id" pero el interfaz usa "dni"
+	private String dni;
 	private String nombre;
 	private String telefono;
 	private String email;
@@ -17,7 +17,7 @@ public class Usuario {
 	public Usuario(String dni, String nombre, String telefono, String email) {
 		if (dni == null || dni.isEmpty() || nombre == null || nombre.isEmpty() || telefono == null || telefono.isEmpty()
 				|| email == null || email.isEmpty()) {
-			throw new RuntimeException("DNI, nombre, teléfono y email son obligatorios.");
+			throw new IllegalArgumentException("DNI, nombre, teléfono y email son obligatorios.");
 		}
 		this.dni = dni;
 		this.nombre = nombre;
@@ -29,11 +29,11 @@ public class Usuario {
 
 	public void agregarCuenta(Cuenta c) {
 		if (c == null) {
-			throw new RuntimeException("No se puede agregar una cuenta nula al usuario.");
+			throw new IllegalArgumentException("No se puede agregar una cuenta nula al usuario.");
 		}
 
 		if (this.cuentas.containsKey(c.getAlias())) {
-			throw new RuntimeException(
+			throw new IllegalArgumentException(
 					"La cuenta con alias " + c.getAlias() + " ya se encuentra vinculada a este usuario.");
 		}
 
@@ -94,6 +94,6 @@ public class Usuario {
 	}
 
 	public Map<String, Cuenta> getCuentas() {
-		return cuentas;
+		return new HashMap<>(this.cuentas);
 	}
 }

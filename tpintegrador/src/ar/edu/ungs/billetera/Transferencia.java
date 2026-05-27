@@ -6,10 +6,10 @@ public class Transferencia extends Actividad {
 	public Transferencia(double monto, Cuenta origen, Cuenta destino) {
 		super(monto, origen);
 		if(destino == null) {
-			throw new RuntimeException("Una cuenta de destino es obligatoria.");
+			throw new IllegalArgumentException("Una cuenta de destino es obligatoria.");
 		}
 		if(origen.equals(destino)) {
-			throw new RuntimeException("La cuenta de origen no puede ser igual a la de destino");
+			throw new IllegalArgumentException("La cuenta de origen no puede ser igual a la de destino");
 		}
 		this.destino = destino;
 	}
@@ -17,11 +17,10 @@ public class Transferencia extends Actividad {
 	@Override
 	public void ejecutar() {
 		try {
-			//validarInversion();
 			getOrigen().transferir(getDestino(), getMonto());
 			aprobar(); 
 		}
-		catch (RuntimeException e) {
+		catch (IllegalArgumentException e) {
 			rechazar();
 		    throw e; 
 		}

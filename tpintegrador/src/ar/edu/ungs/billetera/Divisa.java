@@ -3,19 +3,14 @@ package ar.edu.ungs.billetera;
 import java.time.LocalDate;
 
 public class Divisa extends Inversion {
-
-	// Guarda la cotización del activo al momento
-	// en que se creó la inversión.
-	// Sirve para comparar luego con la cotización actual
-	// y calcular la ganancia o pérdida.
+	// guarda la cotización del activo al momento
 	private double cotizacionInicial;
 
-	public Divisa(double monto, Cuenta origen, int id, int plazo, String activo, double tasa, boolean precancelable) {
+	public Divisa(double monto, Cuenta origen, int id, int plazo, String activo,
+			      double tasa, boolean precancelable) {
 
-		// Las inversiones en divisas pueden ser precancelables o no
 		super(monto, origen, id, plazo, activo, tasa, precancelable);
 
-		// Guarda cotización inicial del activo
 		this.cotizacionInicial = Utilitarios.consultarCotizacion(activo);
 	}
 
@@ -23,16 +18,16 @@ public class Divisa extends Inversion {
 	public void validarInversion() {
 		// Verifica que el monto sea válido.
 		if (getMonto() <= 0) {
-			throw new RuntimeException("Monto invalido.");
+			throw new IllegalArgumentException("Monto invalido.");
 		}
 		// Verifica que la cuenta tenga saldo suficiente.
 		if (getMonto() > getOrigen().getSaldo()) {
-			throw new RuntimeException("Saldo insuficiente.");
+			throw new IllegalArgumentException("Saldo insuficiente.");
 		}
 		
-		//this.getOrigen().validarOperacion(this.getMonto()); NO SÉ SI ES NECESARIO
+		this.getOrigen().validarInversion(this.getMonto());
 		
-		// Verifica que la divisa exista
+		// verifica que la divisa exista
 		Utilitarios.consultarCotizacion(getActivo());
 	}
 
@@ -49,23 +44,6 @@ public class Divisa extends Inversion {
 	    double intereses = capitalEnDivisa * (getTasa() / 365.0) * dias;
 	    
 	    return intereses;
-	}
-
-	@Override
-	public void ejecutar() {
-
-		try {
-			validarInversion(); // Primero valida la inversión.
-			getOrigen().invertir(this); // Descuenta saldo y registra inversión en la cuenta de origen
-			aprobar();
-
-		} catch (RuntimeException e) {
-			rechazar();
-			throw e; // relanza excepcion
-
-		} finally {
-			getOrigen().registrarActividad(this); // siempre se registra en el historial
-		}
 	}
 
 	@Override
