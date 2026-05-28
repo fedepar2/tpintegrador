@@ -49,7 +49,7 @@ public abstract class Cuenta implements Comparable<Cuenta>{
 
 	public void registrarActividad(Actividad act) {
 		if (act == null) {
-			throw new IllegalStateException("La actividad debe existir.");
+			throw new IllegalArgumentException("La actividad debe existir.");
 		}
 		else {
 			actividades.add(act);

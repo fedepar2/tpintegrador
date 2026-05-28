@@ -20,13 +20,13 @@ public class CuentaCorporativa extends Cuenta {
 	}
 	
 	@Override
-	protected void validarTransferencia(double monto) {
-		validar(monto);
+	protected void validarInversion(double monto) {
+	    validar(monto);
 	}
 	
 	@Override
-	protected void validarInversion(double monto) {
-	    validar(monto);
+	protected void validarTransferencia(double monto) {
+		validar(monto);
 	}
 
 	private void validar(double monto) {

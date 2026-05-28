@@ -10,6 +10,7 @@ public class CuentaRegular extends Cuenta {
 
 	@Override
 	protected void validarTransferencia(double monto) {
+	
 		if (monto <= 0) {
 			throw new IllegalArgumentException("Monto invalido.");
 		}
