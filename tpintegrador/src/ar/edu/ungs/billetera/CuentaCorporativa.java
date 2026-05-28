@@ -40,7 +40,7 @@ public class CuentaCorporativa extends Cuenta {
 
 	    String dniTitular = getTitular().getDni();
 	    if (!empresa.estaAutorizado(dniTitular)) {
-	        throw new IllegalArgumentException("El titular con DNI " + dniTitular + 
+	        throw new IllegalStateException("El titular con DNI " + dniTitular + 
 	                                           " no tiene autorización para operar esta cuenta corporativa.");
 	    }
 	}
